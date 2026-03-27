@@ -36,5 +36,12 @@ class CreatePartoutH extends CreateRecord
                 'tipe' => 'OUT'
             ]);
         }
+
+        // Log aktivitas
+        \App\Helpers\LogHelper::log(
+            'Tambah Transaksi',
+            'Part Out',
+            'Kode: ' . $this->record->code
+        );
     }
 }

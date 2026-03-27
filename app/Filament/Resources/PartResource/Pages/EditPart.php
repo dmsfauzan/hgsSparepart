@@ -3,17 +3,18 @@
 namespace App\Filament\Resources\PartResource\Pages;
 
 use App\Filament\Resources\PartResource;
-use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPart extends EditRecord
 {
     protected static string $resource = PartResource::class;
 
-    protected function getHeaderActions(): array
+    protected function afterSave(): void
     {
-        return [
-            Actions\DeleteAction::make(),
-        ];
+        \App\Helpers\LogHelper::log(
+            'Edit Data',
+            'Master Data',
+            'Edit Part: ' . $this->record->kode . ' - ' . $this->record->nama
+        );
     }
 }

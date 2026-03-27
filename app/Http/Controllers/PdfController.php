@@ -39,4 +39,24 @@ class PdfController extends Controller
 
         return $pdf->stream('laporan-mutasi-' . $bulan . '-' . $tahun . '.pdf');
     }
+
+    public function laporanStokPdf()
+    {
+        $parts = \App\Models\Part::orderBy('kode')->get();
+        $tanggal = \Carbon\Carbon::now()->format('d M Y H:i');
+        $pdf = Pdf::loadView('pdf.laporan-stok', compact('parts', 'tanggal'));
+        return $pdf->stream('laporan-stok.pdf');
+    }
+
+    public function laporanPerPartPdf($id)
+    {
+        $part = \App\Models\Part::findOrFail($id);
+        $mutasi = \App\Models\PartMutasi::where('part_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $tanggal = \Carbon\Carbon::now()->format('d M Y H:i');
+
+        $pdf = Pdf::loadView('pdf.laporan-perpart', compact('part', 'mutasi', 'tanggal'));
+        return $pdf->stream('laporan-perpart-' . $part->kode . '.pdf');
+    }
 }
