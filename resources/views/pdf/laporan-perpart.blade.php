@@ -12,6 +12,10 @@
             td.center { text-align: center; }
             .in { color: green; font-weight: bold; }
             .out { color: red; font-weight: bold; }
+            .signature-table { margin-top: 40px; width: 100%; border-collapse: collapse; }
+            .signature-table td { border: none; text-align: center; padding: 0 10px; width: 20%; }
+            .signature-line { margin-top: 50px; border-top: 1px solid #000; width: 80%; margin-left: auto; margin-right: auto; }
+            .print-info { margin-top: 20px; font-size: 11px; }
         </style>
     </head>
     <body>
@@ -47,5 +51,36 @@
                 @endforeach
             </tbody>
         </table>
+
+        <!-- Tanda Tangan -->
+        <table class="signature-table">
+            <tr>
+                <td><strong>Approved</strong></td>
+                <td><strong>Is Known</strong></td>
+                <td><strong>Cashier</strong></td>
+                <td><strong>Receiver</strong></td>
+                <td><strong>Requested</strong></td>
+            </tr>
+            <tr>
+                <td style="height: 60px;"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><div class="signature-line"></div></td>
+                <td><div class="signature-line"></div></td>
+                <td><div class="signature-line"></div></td>
+                <td><div class="signature-line"></div></td>
+                <td><div class="signature-line"></div></td>
+            </tr>
+        </table>
+
+        <!-- Print Info -->
+        <div class="print-info">
+            <p>Print User : {{ strtoupper(auth()->user()->name) }}</p>
+            <p>Print Date : {{ \Carbon\Carbon::now()->format('m/d/Y g:i:s A') }}</p>
+        </div>
     </body>
 </html>
