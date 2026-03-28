@@ -21,7 +21,7 @@ class ActivityLogResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()->is_admin;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     public static function canCreate(): bool
@@ -36,7 +36,7 @@ class ActivityLogResource extends Resource
 
     public static function canDelete($record): bool
     {
-        return auth()->user()->is_admin;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     public static function form(Form $form): Form

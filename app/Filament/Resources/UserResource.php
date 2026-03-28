@@ -23,22 +23,22 @@ class UserResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()->is_admin;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     public static function canCreate(): bool
     {
-        return auth()->user()->is_admin;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     public static function canEdit($record): bool
     {
-        return auth()->user()->is_admin;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     public static function canDelete($record): bool
     {
-        return auth()->user()->is_admin;
+        return auth()->check() && auth()->user()->is_admin;
     }
 
     public static function form(Form $form): Form
@@ -59,9 +59,9 @@ class UserResource extends Resource
                     Forms\Components\TextInput::make('password')
                         ->label('Password')
                         ->password()
-                        ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                        ->helperText('Kosongkan jika user akan set password sendiri saat register')
+                        ->dehydrateStateUsing(fn ($state) => filled($state) ? Hash::make($state) : null)
                         ->dehydrated(fn ($state) => filled($state))
-                        ->required(fn (string $operation): bool => $operation === 'create')
                         ->columnSpan(1),
                     Forms\Components\Toggle::make('is_admin')
                         ->label('Admin Utama')
@@ -84,6 +84,9 @@ class UserResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_admin')
                     ->label('Admin Utama')
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('is_registered')
+                    ->label('Sudah Daftar')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat')

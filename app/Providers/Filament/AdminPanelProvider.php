@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Support\HtmlString;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,12 +28,23 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('HGS Sparepart')
-            ->brandLogoHeight('40px')
+            ->brandLogoHeight('60px')
             ->favicon(asset('images/HGS LOGO.png'))
-            ->login()
+            ->login(\App\Filament\Pages\Auth\Login::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->renderHook(
+                'panels::auth.login.form.after',
+                fn () => new HtmlString('
+                    <div style="text-align:center;margin-top:16px;font-size:14px;color:#6B7280;">
+                        Belum punya akun?
+                        <a href="/admin/register" style="color:#F59E0B;font-weight:500;text-decoration:none;">
+                            Daftar di sini
+                        </a>
+                    </div>
+                ')
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -40,8 +52,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                //Widgets\AccountWidget::class,
-                //Widgets\FilamentInfoWidget::class,
                 \App\Filament\Widgets\StatsOverview::class,
                 \App\Filament\Widgets\TransaksiChart::class,
             ])
